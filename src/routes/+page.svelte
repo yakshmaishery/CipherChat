@@ -176,6 +176,10 @@
          // @ts-ignore
          peer.call(AnotherID,screenStream)
          conn.send("SharedScreenzjhgdvzjvguyzgv")
+         if(videodata){
+            videodata.srcObject = screenStream
+            videodata.play()
+         }
          const mediarecorder = new MediaRecorder(screenStream)
          mediarecorder.start()
          mediarecorder.addEventListener("stop",()=>{
@@ -216,6 +220,10 @@
          // @ts-ignore
          peer.call(AnotherID,CameraStream)
          conn.send("SharedCamerazjhgdvzjvguyzgv")
+         if(videodataCamera){
+            videodataCamera.srcObject = CameraStream
+            videodataCamera.play()
+         }
          const mediarecorder = new MediaRecorder(CameraStream)
          mediarecorder.start()
          mediarecorder.addEventListener("stop",()=>{
