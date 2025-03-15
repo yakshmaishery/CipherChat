@@ -2,6 +2,8 @@
 
    export let Window = ""
    export let IsConnected = false
+   export let CameraOpen = false
+   export let ScreenOpen = false
    import House from "@lucide/svelte/icons/house";
    import { MessageCircle,Video,ScreenShare,Contact,Landmark } from "@lucide/svelte";
    import * as Sidebar from "$lib/components/ui/sidebar/index.js";3
@@ -67,5 +69,15 @@
       </Sidebar.Menu>
      </Sidebar.GroupContent>
     </Sidebar.Group>
+    <Sidebar.GroupContent>
+      <ul class="my-6 ml-6 list-disc [&>li]:mt-2">
+         {#if ScreenOpen}
+            <li>Your Screen is Shared</li>
+         {/if}
+         {#if CameraOpen}
+            <li>Your Camera is Open</li>
+         {/if}
+      </ul>
+    </Sidebar.GroupContent>
    </Sidebar.Content>
   </Sidebar.Root>

@@ -24,6 +24,7 @@
 	let LogMessages:{type:string;message:string;timestamp:Date}[] = []
    let VulnerableMessages = ["jhzxkdvbuyizxv","CHATLEAVECODE","SharedScreenzjhgdvzjvguyzgv","StopScreenzjhgdvzjvguyzgv","SharedCamerazjhgdvzjvguyzgv","StopCamerazjhgdvzjvguyzgv"]
    let CameraOpen = false
+   let ScreenOpen = false
    let CameraStream:any = null
    let cameraSide:string = "user"
    let videodata:HTMLVideoElement
@@ -128,8 +129,10 @@
 			// 	message: 'Please enter message!',
 			// };
 			// toastStore.trigger(t);
+         Swal.fire({icon:"warning",title:"Message cannot be empty!",confirmButtonColor: "green"})
       }
       else{
+         Swal.fire({icon:"error",title:"User Data contains vulnerable Information",confirmButtonColor: "green"})
          // const t: ToastSettings = {
 			// 	message: 'User Data contains vulnerable Information',
 			// };
@@ -176,15 +179,13 @@
          // @ts-ignore
          peer.call(AnotherID,screenStream)
          conn.send("SharedScreenzjhgdvzjvguyzgv")
-         if(videodata){
-            videodata.srcObject = screenStream
-            videodata.play()
-         }
+         ScreenOpen =true
          const mediarecorder = new MediaRecorder(screenStream)
          mediarecorder.start()
          mediarecorder.addEventListener("stop",()=>{
             // LeaveConnection()
             conn.send("StopScreenzjhgdvzjvguyzgv")
+            ScreenOpen = false
          })
       }
    }
@@ -220,10 +221,6 @@
          // @ts-ignore
          peer.call(AnotherID,CameraStream)
          conn.send("SharedCamerazjhgdvzjvguyzgv")
-         if(videodataCamera){
-            videodataCamera.srcObject = CameraStream
-            videodataCamera.play()
-         }
          const mediarecorder = new MediaRecorder(CameraStream)
          mediarecorder.start()
          mediarecorder.addEventListener("stop",()=>{
@@ -242,7 +239,7 @@
 </script>
 <ModeWatcher />
 <Sidebar.Provider>
-	<AppSidebar bind:Window bind:IsConnected/>
+	<AppSidebar bind:Window bind:IsConnected bind:CameraOpen bind:ScreenOpen/>
    <main style="width: 100%;">
       <Sidebar.Trigger />
       <div style={`content-visibility:${Window=="Home"?"auto":"hidden"}`}>
