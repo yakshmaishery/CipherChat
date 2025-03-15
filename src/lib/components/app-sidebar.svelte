@@ -1,6 +1,7 @@
 <script lang="ts">
 
    export let Window = ""
+   export let IsConnected = false
    import House from "@lucide/svelte/icons/house";
    import { MessageCircle,Video,ScreenShare,Upload,Contact,Landmark } from "@lucide/svelte";
    import * as Sidebar from "$lib/components/ui/sidebar/index.js";3
@@ -54,7 +55,11 @@
         <Sidebar.MenuItem>
          <Sidebar.MenuButton>
           {#snippet child({ props })}
-           <a style="cursor: pointer;" {...props} on:click={()=>{Window = item.title}}>
+           <a style="cursor: pointer;" {...props} on:click={()=>{
+               if(IsConnected){
+                  Window = item.title
+               }
+            }}>
             <item.icon />
             <span>{item.title}</span>
            </a>

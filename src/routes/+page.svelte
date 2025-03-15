@@ -231,7 +231,7 @@
 </script>
 <ModeWatcher />
 <Sidebar.Provider>
-	<AppSidebar bind:Window/>
+	<AppSidebar bind:Window bind:IsConnected/>
    <main style="width: 100%;">
       <Sidebar.Trigger />
       <div style={`content-visibility:${Window=="Home"?"auto":"hidden"}`}>
