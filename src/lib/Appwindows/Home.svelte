@@ -15,7 +15,7 @@
     Share your ID - {UserID}
   </h2>
   <div class="mt-10" style="display: flex;">
-   <Input bind:value={AnotherID}  disabled={IsConnected}/>
+   <Input bind:value={AnotherID}  disabled={IsConnected} style="text-transform: lowercase" placeholder="Search by another Id..."/>
       <button class="bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 rounded-md" 
       on:click={()=>{dispatch("ConnectwithUserFirst")}} disabled={IsConnected}>Connect</button>
    </div>
