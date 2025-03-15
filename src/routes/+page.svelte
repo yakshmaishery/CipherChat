@@ -104,6 +104,9 @@
             catch{}
 			}
 			else{
+            if(Window != "Chat"){
+               Swal.fire({icon:"info",title:"You got a message!",text:"Go to Chat",confirmButtonColor: "green"})
+            }
 				LogMessages.push({type:"Receiver",message:data,timestamp:new Date()})
 				LogMessages = LogMessages
             scrolldownmessages()

@@ -1,6 +1,7 @@
 .Textdiv{
    display: flex;
    width: 100%;
+   padding: 10px;
 }
 .ChatWindow{
    /* height: 90%;
