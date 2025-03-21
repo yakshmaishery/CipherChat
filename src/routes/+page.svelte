@@ -135,7 +135,7 @@
                console.log(`Received ${fileInfo[data.name].received} of ${fileInfo[data.name].size}`);
             } else if (data.type === 'end') {
                const received = new Blob(receivedBuffers[data.name]);
-               const a = document.createElement('a');
+               // const a = document.createElement('a');
                // a.href = URL.createObjectURL(received);
                // a.download = data.name;
                // a.click();
@@ -314,6 +314,13 @@
       }
    }
 
+   const downloadfile = (filename:string,base64:string) =>{
+      const a = document.createElement('a');
+      a.href = base64;
+      a.download = filename;
+      a.click();
+   }
+
 </script>
 <ModeWatcher />
 <Sidebar.Provider>
@@ -370,7 +377,7 @@
                      <Table.Cell class="font-medium">{item.filename}</Table.Cell>
                      <Table.Cell class="text-right">
                      <button class="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md" 
-                     disabled={!IsConnected}><Download/></button>
+                     disabled={!IsConnected} on:click={()=>{downloadfile(item.filename,item.base64)}}><Download/></button>
                      </Table.Cell>
                   </Table.Row>
                  {/each}
