@@ -6,6 +6,7 @@
 	import { ModeWatcher } from "mode-watcher";
 	import * as Sidebar from "$lib/components/ui/sidebar/index.js";
    import * as Table from "$lib/components/ui/table/index.js";
+   import { Progress } from "$lib/components/ui/progress/index.js";
    import { Download } from "@lucide/svelte";
    import AppSidebar from "$lib/components/app-sidebar.svelte";
    import Contact from "$lib/Appwindows/Contact.svelte";
@@ -35,6 +36,8 @@
    const CHUNK_SIZE = 64 * 1024; // 64KB chunks
    const receivedBuffers:any = {};
    const fileInfo:any = {};
+   let Progressvalue = 0;
+   let Progressmax = 0;
    let downloadfileList:{filename:string,base64:string}[] = []
    const shortdummyID = nanoid(4).toLowerCase() // Generate Random User ID
    var peer = new Peer(shortdummyID) // Create Peer
@@ -129,10 +132,13 @@
             if (data.type === 'start') {
                fileInfo[data.name] = { size: data.size, received: 0 };
                receivedBuffers[data.name] = [];
+               Progressvalue=0
             } else if (data.type === 'chunk') {
                receivedBuffers[data.name].push(data.data);
                fileInfo[data.name].received += data.data.byteLength;
-               console.log(`Received ${fileInfo[data.name].received} of ${fileInfo[data.name].size}`);
+               Progressvalue=fileInfo[data.name].received
+               Progressmax = fileInfo[data.name].size
+               // console.log(`Received ${fileInfo[data.name].received} of ${fileInfo[data.name].size}`);
             } else if (data.type === 'end') {
                const received = new Blob(receivedBuffers[data.name]);
                // const a = document.createElement('a');
@@ -143,7 +149,10 @@
                downloadfileList = downloadfileList
                delete receivedBuffers[data.name];
                delete fileInfo[data.name];
-               console.log('Download ready');
+               if(Window!="File Transfer"){
+                  Swal.fire({icon:"success",title:"You have received an file go to File Transfer!",confirmButtonColor: "green"})
+               }
+               // console.log('Download ready');
             }
          }
 		})
@@ -241,7 +250,7 @@
    
    // Start Share Screen
    async function CameraScreen() {
-      const constraints = { video: { facingMode: cameraSide } }; // Use "environment" for back camera
+      const constraints = { video: { facingMode: cameraSide } ,Audio:true}; // Use "environment" for back camera
       CameraStream = await navigator.mediaDevices.getUserMedia(constraints).catch((e) => {
              if(e.name == "NotAllowedError"){
                     Swal.fire({icon:"warning",title:"Recording was cancelled",confirmButtonColor: "green"})
@@ -284,11 +293,14 @@
          offset
       });
       offset += e.target.result.byteLength;
+      Progressvalue=offset
+      Progressmax = file.size
       if (offset < file.size) {
          readSlice(offset);
       } else {
          conn.send({ type: 'end', name: file.name });
-         console.log('File transfer complete');
+         Swal.fire({icon:"success",title:"File transfer complete",confirmButtonColor: "green"})
+         // console.log('File transfer complete');
       }
    };
 
@@ -301,13 +313,20 @@
       readSlice(0);
    }
 
-   const filechange = (e:any) =>{
+   const filechange = async (e:any) =>{
       console.warn(e.target.files)
       if(e){
          if(e.target){
             if(e.target.files){
                if(e.target.files.length>0){
                   sendFile(e.target.files[0])
+                  try {
+                  let base64String:any = await fileToBase64(e.target.files[0]);
+                  downloadfileList.push({filename:e.target.files[0].name,base64:base64String})
+                  downloadfileList = downloadfileList
+               } catch (err) {
+                  console.error('Error converting file:', err);
+               }
                }
             }
          }
@@ -319,6 +338,15 @@
       a.href = base64;
       a.download = filename;
       a.click();
+   }
+
+   function fileToBase64(file:any) {
+      return new Promise((resolve, reject) => {
+         const reader = new FileReader();
+         reader.readAsDataURL(file);  // This will give you a base64 encoded string
+         reader.onload = () => resolve(reader.result);
+         reader.onerror = error => reject(error);
+      });
    }
 
 </script>
@@ -353,6 +381,7 @@
          <div class="px-10 py-3">
             <input type="file" class="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md" on:change={(e)=>{filechange(e)}} />
          </div>
+         <Progress value={Progressvalue} max={Progressmax} class="w-[95%] mx-3" />
          <div class="px-10">
             <Table.Root>
                <Table.Caption></Table.Caption>
