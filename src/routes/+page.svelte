@@ -5,6 +5,8 @@
 <script lang="ts">
 	import { ModeWatcher } from "mode-watcher";
 	import * as Sidebar from "$lib/components/ui/sidebar/index.js";
+   import * as Table from "$lib/components/ui/table/index.js";
+   import { Download } from "@lucide/svelte";
    import AppSidebar from "$lib/components/app-sidebar.svelte";
    import Contact from "$lib/Appwindows/Contact.svelte";
    import Home from "$lib/Appwindows/Home.svelte";
@@ -30,8 +32,12 @@
    let videodata:HTMLVideoElement
    let videodataCamera:HTMLVideoElement
    let anotheruserscreen = ""
+   const CHUNK_SIZE = 64 * 1024; // 64KB chunks
+   const receivedBuffers:any = {};
+   const fileInfo:any = {};
+   let downloadfileList:{filename:string,base64:string}[] = []
    const shortdummyID = nanoid(4).toLowerCase() // Generate Random User ID
-   var peer = new Peer(shortdummyID,{config: {iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]}}) // Create Peer
+   var peer = new Peer(shortdummyID) // Create Peer
 
    peer.on("open",(id) => { // Connect Peer if Success set the ID
       UserID = id
@@ -62,61 +68,84 @@
 
    peer.on('connection', function(inconn) {
       inconn.on('data', function(data:any){
-			if(data == "jhzxkdvbuyizxv"){
-				console.warn(inconn.peer)
-            AnotherID = inconn.peer
-            conn = peer.connect(AnotherID)
-            conn.on("open",function(){
-               IsConnected = true
-               Swal.fire({icon:"success",title:`Connection has been established with ${AnotherID}`,confirmButtonColor: "green"})
-            })
-			}
-			else if(data == "CHATLEAVECODE"){
-            // If leave
-            conn.close()
-            location.reload()
+         if(typeof data == "string"){
+            if(data == "jhzxkdvbuyizxv"){
+               console.warn(inconn.peer)
+               AnotherID = inconn.peer
+               conn = peer.connect(AnotherID)
+               conn.on("open",function(){
+                  IsConnected = true
+                  Swal.fire({icon:"success",title:`Connection has been established with ${AnotherID}`,confirmButtonColor: "green"})
+               })
+            }
+            else if(data == "CHATLEAVECODE"){
+               // If leave
+               conn.close()
+               location.reload()
+            }
+            else if(data == "SharedScreenzjhgdvzjvguyzgv"){
+               Window = "Share Screen"
+               anotheruserscreen = "Share Screen"
+               // NavchildRef.closedrawer();
+            }
+            else if(data == "SharedCamerazjhgdvzjvguyzgv"){
+               Window = "Video Chat"
+               anotheruserscreen = "Video Chat"
+               // videodataCamera.srcObject=null
+               // try{
+               //    document.exitFullscreen()
+               // }
+               // catch{}
+               // NavchildRef.closedrawer();
+            }
+            else if(data == "StopScreenzjhgdvzjvguyzgv"){
+               // NavchildRef.closedrawer();
+               anotheruserscreen = ""
+               videodata.srcObject=null
+               try{
+                  document.exitFullscreen()
+               }
+               catch{}
+            }
+            else if(data == "StopCamerazjhgdvzjvguyzgv"){
+               // NavchildRef.closedrawer();
+               anotheruserscreen = ""
+               videodataCamera.srcObject=null
+               try{
+                  document.exitFullscreen()
+               }
+               catch{}
+            }
+            else{
+               if(Window != "Chat"){
+                  Swal.fire({icon:"info",title:"You got a message!",text:"Go to Chat",confirmButtonColor: "green"})
+               }
+               LogMessages.push({type:"Receiver",message:data,timestamp:new Date()})
+               LogMessages = LogMessages
+               scrolldownmessages()
+            }
          }
-			else if(data == "SharedScreenzjhgdvzjvguyzgv"){
-				Window = "Share Screen"
-            anotheruserscreen = "Share Screen"
-				// NavchildRef.closedrawer();
-			}
-			else if(data == "SharedCamerazjhgdvzjvguyzgv"){
-				Window = "Video Chat"
-            anotheruserscreen = "Video Chat"
-            // videodataCamera.srcObject=null
-            // try{
-            //    document.exitFullscreen()
-            // }
-            // catch{}
-				// NavchildRef.closedrawer();
-			}
-			else if(data == "StopScreenzjhgdvzjvguyzgv"){
-				// NavchildRef.closedrawer();
-            anotheruserscreen = ""
-            videodata.srcObject=null
-            try{
-               document.exitFullscreen()
+         else{
+            if (data.type === 'start') {
+               fileInfo[data.name] = { size: data.size, received: 0 };
+               receivedBuffers[data.name] = [];
+            } else if (data.type === 'chunk') {
+               receivedBuffers[data.name].push(data.data);
+               fileInfo[data.name].received += data.data.byteLength;
+               console.log(`Received ${fileInfo[data.name].received} of ${fileInfo[data.name].size}`);
+            } else if (data.type === 'end') {
+               const received = new Blob(receivedBuffers[data.name]);
+               const a = document.createElement('a');
+               // a.href = URL.createObjectURL(received);
+               // a.download = data.name;
+               // a.click();
+               downloadfileList.push({filename:data.name,base64:URL.createObjectURL(received)})
+               downloadfileList = downloadfileList
+               delete receivedBuffers[data.name];
+               delete fileInfo[data.name];
+               console.log('Download ready');
             }
-            catch{}
-			}
-			else if(data == "StopCamerazjhgdvzjvguyzgv"){
-				// NavchildRef.closedrawer();
-            anotheruserscreen = ""
-            videodataCamera.srcObject=null
-            try{
-               document.exitFullscreen()
-            }
-            catch{}
-			}
-			else{
-            if(Window != "Chat"){
-               Swal.fire({icon:"info",title:"You got a message!",text:"Go to Chat",confirmButtonColor: "green"})
-            }
-				LogMessages.push({type:"Receiver",message:data,timestamp:new Date()})
-				LogMessages = LogMessages
-            scrolldownmessages()
-			}
+         }
 		})
 	})
 
@@ -241,27 +270,113 @@
          CameraStream.getTracks().forEach((track:any) => track.stop()); // Stop all tracks
       }
    }
+
+   function sendFile(file:any) {
+  const fileReader = new FileReader();
+  let offset = 0;
+
+  fileReader.onload = (e:any) => {
+      conn.send({
+         type: 'chunk',
+         name: file.name,
+         size: file.size,
+         data: e.target.result,
+         offset
+      });
+      offset += e.target.result.byteLength;
+      if (offset < file.size) {
+         readSlice(offset);
+      } else {
+         conn.send({ type: 'end', name: file.name });
+         console.log('File transfer complete');
+      }
+   };
+
+      function readSlice(o:any) {
+         const slice = file.slice(o, o + CHUNK_SIZE);
+         fileReader.readAsArrayBuffer(slice);
+      }
+
+      conn.send({ type: 'start', name: file.name, size: file.size });
+      readSlice(0);
+   }
+
+   const filechange = (e:any) =>{
+      console.warn(e.target.files)
+      if(e){
+         if(e.target){
+            if(e.target.files){
+               if(e.target.files.length>0){
+                  sendFile(e.target.files[0])
+               }
+            }
+         }
+      }
+   }
+
 </script>
 <ModeWatcher />
 <Sidebar.Provider>
 	<AppSidebar bind:Window bind:IsConnected bind:CameraOpen bind:ScreenOpen/>
    <main style="width: 100%;">
       <Sidebar.Trigger />
+      <!-- Home Window -->
       <div style={`content-visibility:${Window=="Home"?"auto":"hidden"}`}>
          <Home bind:UserID bind:AnotherID on:ConnectwithUserFirst={ConnectwithUserFirst} bind:IsConnected on:LeaveConnection={LeaveConnection}/>
       </div>
+      <!-- Chat Window -->
       <div style={`content-visibility:${Window=="Chat"?"auto":"hidden"}`}>
          <Chat bind:UserMessage bind:LogMessages on:SendMessage={SendMessage} bind:IsConnected/>
       </div>
+      <!-- Contact Window -->
       <div style={`content-visibility:${Window=="Contact"?"auto":"hidden"}`}>
          <Contact/>
       </div>
+      <!-- Share Screen Window -->
       <div style={`content-visibility:${Window=="Share Screen"?"auto":"hidden"}`}>
          <VideoShare on:ShareScreen={ShareScreen} bind:videodata={videodata} bind:IsConnected bind:ScreenOpen/>
       </div>
+      <!-- Video Chat Window -->
       <div style={`content-visibility:${Window=="Video Chat"?"auto":"hidden"}`}>
          <ShareCamera on:CameraScreen={CameraScreen} bind:videodata={videodataCamera} 
          bind:IsConnected on:StopCamera={StopCamera} bind:cameraSide={cameraSide} bind:CameraOpen/>
+      </div>
+      <!-- File Transfer Window -->
+      <div style={`content-visibility:${Window=="File Transfer"?"auto":"hidden"}`}>
+         <div class="px-10 py-3">
+            <input type="file" class="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md" on:change={(e)=>{filechange(e)}} />
+            <button class="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md" 
+            disabled={!IsConnected}>Upload File</button>
+         </div>
+         <div class="px-10">
+            <Table.Root>
+               <Table.Caption></Table.Caption>
+               <Table.Header>
+                 <Table.Row>
+                   <Table.Head class="w-[100px]">File name</Table.Head>
+                   <Table.Head class="text-right">download</Table.Head>
+                 </Table.Row>
+               </Table.Header>
+               <Table.Body>
+                 <!-- <Table.Row>
+                   <Table.Cell class="font-medium">ABC.pdf</Table.Cell>
+                   <Table.Cell class="text-right">
+                     <button class="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md" 
+                     disabled={!IsConnected}><Download/></button>
+                   </Table.Cell>
+                 </Table.Row> -->
+                 {#each downloadfileList as item}
+                  <Table.Row>
+                     <Table.Cell class="font-medium">{item.filename}</Table.Cell>
+                     <Table.Cell class="text-right">
+                     <button class="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md" 
+                     disabled={!IsConnected}><Download/></button>
+                     </Table.Cell>
+                  </Table.Row>
+                 {/each}
+               </Table.Body>
+             </Table.Root>
+         </div>
       </div>
     </main>
 </Sidebar.Provider>

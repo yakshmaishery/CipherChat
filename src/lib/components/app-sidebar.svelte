@@ -5,7 +5,7 @@
    export let CameraOpen = false
    export let ScreenOpen = false
    import House from "@lucide/svelte/icons/house";
-   import { MessageCircle,Video,ScreenShare,Contact,Landmark } from "@lucide/svelte";
+   import { MessageCircle,Video,ScreenShare,Contact,Landmark,UploadCloud } from "@lucide/svelte";
    import * as Sidebar from "$lib/components/ui/sidebar/index.js";3
    import DarkModeButton from '$lib/components/DarkModeButton.svelte';
    import '$lib/Styles/AppSliderCSS.css'
@@ -29,6 +29,10 @@
     {
      title: "Share Screen",
      icon: ScreenShare,
+    },
+    {
+     title: "File Transfer",
+     icon: UploadCloud,
     },
     {
      title: "Tutorials",
