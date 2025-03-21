@@ -13,9 +13,15 @@
       <div class="chat-container">
          {#each LogMessages as item}   
             {#if item.type != "Sender"}
-               <pre class="chat-bubble chat-left">{item.message}</pre>
+               <div class="chat-bubble chat-left">
+                  <button on:click={()=>{navigator.clipboard.writeText(item.message)}}>📋</button>
+                  <pre>{item.message}</pre>
+               </div>
                {:else}
-               <pre class="chat-bubble chat-right">{item.message}</pre>
+               <div class="chat-bubble chat-right">
+                  <button on:click={()=>{navigator.clipboard.writeText(item.message)}}>📋</button>
+                  <pre>{item.message}</pre>
+               </div>
             {/if}
          {/each}
       </div>
