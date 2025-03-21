@@ -257,11 +257,11 @@
          <Contact/>
       </div>
       <div style={`content-visibility:${Window=="Share Screen"?"auto":"hidden"}`}>
-         <VideoShare on:ShareScreen={ShareScreen} bind:videodata={videodata} bind:IsConnected/>
+         <VideoShare on:ShareScreen={ShareScreen} bind:videodata={videodata} bind:IsConnected bind:ScreenOpen/>
       </div>
       <div style={`content-visibility:${Window=="Video Chat"?"auto":"hidden"}`}>
          <ShareCamera on:CameraScreen={CameraScreen} bind:videodata={videodataCamera} 
-         bind:IsConnected on:StopCamera={StopCamera} bind:cameraSide={cameraSide}/>
+         bind:IsConnected on:StopCamera={StopCamera} bind:cameraSide={cameraSide} bind:CameraOpen/>
       </div>
     </main>
 </Sidebar.Provider>
