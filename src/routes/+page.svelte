@@ -58,6 +58,7 @@
    // Connect with another person
    function ConnectwithUserFirst(){
       debugger
+      AnotherID = AnotherID.toLowerCase()
       conn = peer.connect(AnotherID)
       conn.on("open",function(){
          conn.send("jhzxkdvbuyizxv")
