@@ -38,7 +38,12 @@
    })
 
 	peer.on('error', (err) => { // IF Peer connection fails
-      Swal.fire({icon:"error",title:"PEER CONNECTION:- "+err.type,confirmButtonColor: "green"})
+      if(err.type == "invalid-id"){
+         location.reload()
+      }
+      else{
+         Swal.fire({icon:"error",title:"PEER CONNECTION:- "+err.type,confirmButtonColor: "green"})
+      }
    });
 
    // Connect with another person
