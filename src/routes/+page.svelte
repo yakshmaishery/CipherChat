@@ -352,8 +352,6 @@
       <div style={`content-visibility:${Window=="File Transfer"?"auto":"hidden"}`}>
          <div class="px-10 py-3">
             <input type="file" class="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md" on:change={(e)=>{filechange(e)}} />
-            <button class="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md" 
-            disabled={!IsConnected}>Upload File</button>
          </div>
          <div class="px-10">
             <Table.Root>
