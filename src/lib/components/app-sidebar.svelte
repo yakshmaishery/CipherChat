@@ -58,7 +58,7 @@
         <Sidebar.MenuItem>
          <Sidebar.MenuButton>
           {#snippet child({ props })}
-           <a style={Window == item.title?"background: #ff8a00;cursor: pointer;":"cursor: pointer;"} {...props} on:click={()=>{
+           <a style={Window == item.title?"background: hsl(262.1deg 85.15% 57.59%);font-size:large;cursor: pointer;":"cursor: pointer;"} {...props} on:click={()=>{
                if(IsConnected){
                   Window = item.title
                }
