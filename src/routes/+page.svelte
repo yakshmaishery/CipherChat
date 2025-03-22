@@ -39,7 +39,7 @@
    const fileInfo:any = {};
    let Progressvalue = 0;
    let Progressmax = 0;
-   let downloadfileList:{filename:string,base64:string}[] = []
+   let downloadfileList:{filename:string,base64:string,filesize:string,datetime:string}[] = []
    const shortdummyID = nanoid(4).toLowerCase() // Generate Random User ID
    var peer = new Peer(shortdummyID) // Create Peer
 
@@ -151,7 +151,7 @@
                // a.href = URL.createObjectURL(received);
                // a.download = data.name;
                // a.click();
-               downloadfileList.push({filename:data.name,base64:URL.createObjectURL(received)})
+               downloadfileList.push({filename:data.name,base64:URL.createObjectURL(received),filesize:Progressmax.toString(),datetime:new Date().toString()})
                downloadfileList = downloadfileList
                Progressmax = 0
                Progressvalue = 0
@@ -342,7 +342,7 @@
                   sendFile(e.target.files[0])
                   try {
                   let base64String:any = await fileToBase64(e.target.files[0]);
-                  downloadfileList.push({filename:e.target.files[0].name,base64:base64String})
+                  downloadfileList.push({filename:e.target.files[0].name,base64:base64String,filesize:e.target.files[0].size,datetime:new Date().toString()})
                   downloadfileList = downloadfileList
                } catch (err) {
                   console.error('Error converting file:', err);
@@ -410,6 +410,8 @@
                <Table.Header>
                  <Table.Row>
                    <Table.Head class="w-[100px]">File name</Table.Head>
+                   <Table.Head class="w-[100px]">File Size</Table.Head>
+                   <Table.Head class="">timestamp</Table.Head>
                    <Table.Head class="text-right">download</Table.Head>
                  </Table.Row>
                </Table.Header>
@@ -424,6 +426,8 @@
                  {#each downloadfileList as item}
                   <Table.Row>
                      <Table.Cell class="font-medium">{item.filename}</Table.Cell>
+                     <Table.Cell class="font-medium">{item.filesize} bytes</Table.Cell>
+                     <Table.Cell class="font-medium">{item.datetime}</Table.Cell>
                      <Table.Cell class="text-right">
                      <button class="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md" 
                      disabled={!IsConnected} on:click={()=>{downloadfile(item.filename,item.base64)}}><Download/></button>
