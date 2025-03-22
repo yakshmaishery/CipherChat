@@ -77,3 +77,6 @@
    display: flex;
    justify-self: end;
 }
+pre{
+   font-family: sans-serif;
+}
