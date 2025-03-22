@@ -14,12 +14,13 @@
    import Chat from "$lib/Appwindows/Chat.svelte";
    import VideoShare from "$lib/Appwindows/VideoShare.svelte";
    import ShareCamera from "$lib/Appwindows/ShareCamera.svelte";
+   import Tutorial from "$lib/Appwindows/Tutorial.svelte";
    import {Peer} from 'peerjs'
    import {nanoid} from 'nanoid'
    import Swal from 'sweetalert2';
 
-   let Window = "Home"
-   let IsConnected:boolean = false
+   let Window = "Tutorials"
+   let IsConnected:boolean = true
 	let UserID = ""
 	let AnotherID = ""
 	let UserMessage = ""
@@ -412,6 +413,10 @@
                </Table.Body>
              </Table.Root>
          </div>
+      </div>
+      <!-- Tutorials Window -->
+      <div style={`content-visibility:${Window=="Tutorials"?"auto":"hidden"}`}>
+         <Tutorial/>
       </div>
     </main>
 </Sidebar.Provider>

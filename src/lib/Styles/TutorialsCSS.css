@@ -1,0 +1,17 @@
+.Listtag{
+   list-style-type: disclosure-closed;
+   display: flex;
+   flex-direction: column;
+   align-items: start;
+   width: 100%;
+   padding-left: 30px;
+   margin-top: 30px;
+}
+.Listtag>li{
+   padding: 3px;
+   margin: 3px;
+   width: 90%;
+   align-content:baseline;
+   box-shadow: 0px 0px 3px 3px gray;
+   text-align: left;
+}
