@@ -35,7 +35,7 @@
    <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
       Tutorial Steps
     </h1>
-      <Accordion.Root class="w-full sm:max-w-[100%]">
+      <Accordion.Root type="single" class="w-full sm:max-w-[100%]">
          {#each AccoridianLists as item}   
             <Accordion.Item value={item.title}>
             <Accordion.Trigger>{item.title}</Accordion.Trigger>
