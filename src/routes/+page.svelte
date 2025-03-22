@@ -64,7 +64,7 @@
       conn.on("open",function(){
          conn.send("jhzxkdvbuyizxv")
          IsConnected = true
-         Swal.fire({icon:"success",title:"Connected successfully",confirmButtonColor: "green"})
+         Swal.fire({icon:"success",title:"Connected successfully",confirmButtonColor: "green",timer:1500,showConfirmButton:false})
       })
       conn.on('error', (err:any) => {
          Swal.fire({icon:"error",title:err.type,confirmButtonColor: "green"})
@@ -80,7 +80,7 @@
                conn = peer.connect(AnotherID)
                conn.on("open",function(){
                   IsConnected = true
-                  Swal.fire({icon:"success",title:`Connection has been established with ${AnotherID}`,confirmButtonColor: "green"})
+                  Swal.fire({icon:"success",title:`Connection has been established with ${AnotherID}`,confirmButtonColor: "green",timer:1500,showConfirmButton:false})
                })
             }
             else if(data == "CHATLEAVECODE"){
@@ -123,7 +123,7 @@
             }
             else{
                if(Window != "Chat"){
-                  Swal.fire({icon:"info",title:"You got a message!",text:"Go to Chat",confirmButtonColor: "green"})
+                  Swal.fire({icon:"info",title:"You got a message!",text:"Go to Chat",confirmButtonColor: "green",timer:1500,showConfirmButton:false})
                }
                LogMessages.push({type:"Receiver",message:data,timestamp:new Date()})
                LogMessages = LogMessages
@@ -152,7 +152,7 @@
                delete receivedBuffers[data.name];
                delete fileInfo[data.name];
                if(Window!="File Transfer"){
-                  Swal.fire({icon:"success",title:"You have received an file go to File Transfer!",confirmButtonColor: "green"})
+                  Swal.fire({icon:"success",title:"You have received an file go to File Transfer!",confirmButtonColor: "green",showConfirmButton:false,timer:1500})
                }
                // console.log('Download ready');
             }
@@ -206,32 +206,37 @@
 
    // Start Share Screen
    async function ShareScreen() {
-      let screenStream = await navigator.mediaDevices.getDisplayMedia({
-      audio: true,
-      video:{
-             width:{ideal:4096},
-             height:{ideal:2160}
-      }
-      }).catch((e) => {
-             if(e.name == "NotAllowedError"){
-                    Swal.fire({icon:"warning",title:"Recording was cancelled",confirmButtonColor: "green"})
-             }
-             else{
-                    Swal.fire({icon:"error",title:"Something went wrong!",confirmButtonColor: "green"})
-             }
-      })
-      if(screenStream){
-         // @ts-ignore
-         peer.call(AnotherID,screenStream)
-         conn.send("SharedScreenzjhgdvzjvguyzgv")
-         ScreenOpen =true
-         const mediarecorder = new MediaRecorder(screenStream)
-         mediarecorder.start()
-         mediarecorder.addEventListener("stop",()=>{
-            // LeaveConnection()
-            conn.send("StopScreenzjhgdvzjvguyzgv")
-            ScreenOpen = false
+      try{
+         let screenStream = await navigator.mediaDevices.getDisplayMedia({
+         audio: true,
+         video:{
+                width:{ideal:4096},
+                height:{ideal:2160}
+         }
+         }).catch((e) => {
+                if(e.name == "NotAllowedError"){
+                       Swal.fire({icon:"warning",title:"Recording was cancelled",confirmButtonColor: "green"})
+                }
+                else{
+                       Swal.fire({icon:"error",title:"Something went wrong!",confirmButtonColor: "green"})
+                }
          })
+         if(screenStream){
+            // @ts-ignore
+            peer.call(AnotherID,screenStream)
+            conn.send("SharedScreenzjhgdvzjvguyzgv")
+            ScreenOpen =true
+            const mediarecorder = new MediaRecorder(screenStream)
+            mediarecorder.start()
+            mediarecorder.addEventListener("stop",()=>{
+               // LeaveConnection()
+               conn.send("StopScreenzjhgdvzjvguyzgv")
+               ScreenOpen = false
+            })
+         }
+      }
+      catch{
+         Swal.fire({icon:"error",title:"Something went wrong!",confirmButtonColor: "green"})
       }
    }
 
@@ -252,26 +257,31 @@
    
    // Start Share Screen
    async function CameraScreen() {
-      const constraints = { video: { facingMode: cameraSide } ,Audio:true}; // Use "environment" for back camera
-      CameraStream = await navigator.mediaDevices.getUserMedia(constraints).catch((e) => {
-             if(e.name == "NotAllowedError"){
-                    Swal.fire({icon:"warning",title:"Recording was cancelled",confirmButtonColor: "green"})
-             }
-             else{
-                    Swal.fire({icon:"error",title:"Something went wrong!",confirmButtonColor: "green"})
-             }
-      })
-      if(CameraStream){
-         CameraOpen = true
-         // @ts-ignore
-         peer.call(AnotherID,CameraStream)
-         conn.send("SharedCamerazjhgdvzjvguyzgv")
-         const mediarecorder = new MediaRecorder(CameraStream)
-         mediarecorder.start()
-         mediarecorder.addEventListener("stop",()=>{
-            // LeaveConnection()
-            conn.send("StopCamerazjhgdvzjvguyzgv")
+      try{
+         const constraints = { video: { facingMode: cameraSide } ,Audio:true}; // Use "environment" for back camera
+         CameraStream = await navigator.mediaDevices.getUserMedia(constraints).catch((e) => {
+                if(e.name == "NotAllowedError"){
+                       Swal.fire({icon:"warning",title:"Recording was cancelled",confirmButtonColor: "green"})
+                }
+                else{
+                       Swal.fire({icon:"error",title:"Something went wrong!",confirmButtonColor: "green"})
+                }
          })
+         if(CameraStream){
+            CameraOpen = true
+            // @ts-ignore
+            peer.call(AnotherID,CameraStream)
+            conn.send("SharedCamerazjhgdvzjvguyzgv")
+            const mediarecorder = new MediaRecorder(CameraStream)
+            mediarecorder.start()
+            mediarecorder.addEventListener("stop",()=>{
+               // LeaveConnection()
+               conn.send("StopCamerazjhgdvzjvguyzgv")
+            })
+         }
+      }
+      catch{
+         Swal.fire({icon:"error",title:"Something went wrong!",confirmButtonColor: "green"})
       }
    }
 
