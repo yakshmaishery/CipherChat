@@ -149,6 +149,8 @@
                // a.click();
                downloadfileList.push({filename:data.name,base64:URL.createObjectURL(received)})
                downloadfileList = downloadfileList
+               Progressmax = 0
+               Progressvalue = 0
                delete receivedBuffers[data.name];
                delete fileInfo[data.name];
                if(Window!="File Transfer"){
@@ -310,6 +312,8 @@
       if (offset < file.size) {
          readSlice(offset);
       } else {
+         Progressmax = 0
+         Progressvalue = 0
          conn.send({ type: 'end', name: file.name });
          Swal.fire({icon:"success",title:"File transfer complete",confirmButtonColor: "green"})
          // console.log('File transfer complete');
@@ -393,7 +397,9 @@
          <div class="px-10 py-3">
             <input type="file" class="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md" on:change={(e)=>{filechange(e)}} />
          </div>
-         <Progress value={Progressvalue} max={Progressmax} class="w-[95%] mx-3" />
+         {#if Progressmax != 0}
+            <Progress value={Progressvalue} max={Progressmax} class="w-[95%] mx-3" />
+         {/if}
          <div class="px-10">
             <Table.Root>
                <Table.Caption></Table.Caption>
