@@ -108,7 +108,9 @@
                anotheruserscreen = ""
                videodata.srcObject=null
                try{
-                  document.exitFullscreen()
+                  if(document.fullscreenElement){
+                     document.exitFullscreen()
+                  }
                }
                catch{}
             }
@@ -117,7 +119,9 @@
                anotheruserscreen = ""
                videodataCamera.srcObject=null
                try{
-                  document.exitFullscreen()
+                  if(document.fullscreenElement){
+                     document.exitFullscreen()
+                  }
                }
                catch{}
             }
