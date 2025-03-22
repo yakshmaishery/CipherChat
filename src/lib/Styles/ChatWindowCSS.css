@@ -40,7 +40,7 @@
 
 /* Left chat bubble */
 .chat-left {
-   background-color: #7096ff;
+   background-color: hsl(347, 63%, 61%);
    align-self: flex-start;
    position: relative;
 }
@@ -52,7 +52,7 @@
    top: 10px;
    border-width: 10px;
    border-style: solid;
-   border-color: transparent #7096ff transparent transparent;
+   border-color: transparent hsl(347, 63%, 61%) transparent transparent;
 }
 
 /* Right chat bubble */
@@ -71,4 +71,9 @@
    border-width: 10px;
    border-style: solid;
    border-color: transparent transparent transparent #4caf50;
+}
+
+.chatcontrolbutton{
+   display: flex;
+   justify-self: end;
 }
