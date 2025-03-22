@@ -47,6 +47,9 @@
     --ring: 263.4 70% 50.4%;
   }
 }
+div[data-sidebar="sidebar"]{
+  background-color: hsl(var(--border) / var(--tw-border-opacity, 1));
+}
 @layer base {
   * {
     @apply border-border;
