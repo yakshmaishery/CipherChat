@@ -74,14 +74,14 @@
      </Sidebar.GroupContent>
     </Sidebar.Group>
     <Sidebar.GroupContent>
-      <ul class="my-6 ml-6 list-disc [&>li]:mt-2">
+      <!-- <ul class="my-6 ml-6 list-disc [&>li]:mt-2">
          {#if ScreenOpen}
             <li>Your Screen is Shared</li>
          {/if}
          {#if CameraOpen}
             <li>Your Camera is Open</li>
          {/if}
-      </ul>
+      </ul> -->
     </Sidebar.GroupContent>
    </Sidebar.Content>
   </Sidebar.Root>
