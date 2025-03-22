@@ -19,8 +19,8 @@
    import {nanoid} from 'nanoid'
    import Swal from 'sweetalert2';
 
-   let Window = "Tutorials"
-   let IsConnected:boolean = true
+   let Window = "Home"
+   let IsConnected:boolean = false
 	let UserID = ""
 	let AnotherID = ""
 	let UserMessage = ""
