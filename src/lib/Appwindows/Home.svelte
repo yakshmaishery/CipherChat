@@ -7,9 +7,9 @@
    import Input from '$lib/components/ui/input/input.svelte'
 </script>
 <div class="container dark:text-white">
-   <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+   <h2 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
       Welcome to Cipher Chat
-    </h1>
+    </h2>
     <h2
     class="mt-10 scroll-m-20 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
     Share your ID - {UserID}
