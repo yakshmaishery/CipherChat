@@ -11,6 +11,7 @@
    import '$lib/Styles/AppSliderCSS.css'
    import {AppName} from '$lib/UserStores'
    import { Slider } from "bits-ui";
+   import Swal from 'sweetalert2';
    
    // Menu items.
    const items = [
@@ -61,6 +62,12 @@
            <a style={Window == item.title?"background: hsl(262.1deg 85.15% 57.59%);font-size:large;cursor: pointer;":"cursor: pointer;"} {...props} on:click={()=>{
                if(IsConnected){
                   Window = item.title
+               }
+               else if(item.title == "Home" || item.title == "Contact" || item.title == "Tutorials"){
+                  Window = item.title
+               }
+               else{
+                  Swal.fire({icon:"success",title:`You need to create connection first!`,confirmButtonColor: "green",timer:3000,showConfirmButton:false})
                }
             }}>
             <item.icon />
