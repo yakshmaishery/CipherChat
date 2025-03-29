@@ -42,6 +42,8 @@
    let downloadfileList:{filename:string,base64:string,filesize:string,datetime:string}[] = []
    const shortdummyID = nanoid(4).toLowerCase() // Generate Random User ID
    var peer = new Peer(shortdummyID) // Create Peer
+   peer.destroy()
+   peer = new Peer(shortdummyID) // Create Peer
 
    peer.on("open",(id) => { // Connect Peer if Success set the ID
       UserID = id
