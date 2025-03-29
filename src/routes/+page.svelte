@@ -15,6 +15,7 @@
    import VideoShare from "$lib/Appwindows/VideoShare.svelte";
    import ShareCamera from "$lib/Appwindows/ShareCamera.svelte";
    import Tutorial from "$lib/Appwindows/Tutorial.svelte";
+   import Notice from "$lib/Appwindows/Notice.svelte";
    import {Peer} from 'peerjs'
    import {nanoid} from 'nanoid'
    import Swal from 'sweetalert2';
@@ -444,6 +445,10 @@
       <!-- Tutorials Window -->
       <div style={`content-visibility:${Window=="Tutorials"?"auto":"hidden"}`}>
          <Tutorial/>
+      </div>
+      <!-- Notice Window -->
+      <div style={`content-visibility:${Window=="Notice"?"auto":"hidden"}`}>
+         <Notice/>
       </div>
     </main>
 </Sidebar.Provider>

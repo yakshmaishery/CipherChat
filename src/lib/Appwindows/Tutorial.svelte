@@ -55,12 +55,12 @@
    <br/>
    <br/>
    <br/>
-   <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+   <!-- <h1 class="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
       Notice
    </h1>
    <div>
       <blockquote class="mt-6 border-l-2 pl-6 italic">
          Screen share is currently not supported for mobile
       </blockquote>
-   </div>
+   </div> -->
 </div>

@@ -5,7 +5,7 @@
    export let CameraOpen = false
    export let ScreenOpen = false
    import House from "@lucide/svelte/icons/house";
-   import { MessageCircle,Video,ScreenShare,Contact,Landmark,UploadCloud } from "@lucide/svelte";
+   import { MessageCircle,Video,ScreenShare,Contact,Landmark,UploadCloud,Bell } from "@lucide/svelte";
    import * as Sidebar from "$lib/components/ui/sidebar/index.js";3
    import DarkModeButton from '$lib/components/DarkModeButton.svelte';
    import '$lib/Styles/AppSliderCSS.css'
@@ -42,6 +42,10 @@
     {
      title: "Contact",
      icon: Contact,
+    },
+    {
+     title: "Notice",
+     icon: Bell,
     }
    ];
   </script>
@@ -63,7 +67,7 @@
                if(IsConnected){
                   Window = item.title
                }
-               else if(item.title == "Home" || item.title == "Contact" || item.title == "Tutorials"){
+               else if(item.title == "Home" || item.title == "Contact" || item.title == "Tutorials" || item.title == "Notice"){
                   Window = item.title
                }
                else{
