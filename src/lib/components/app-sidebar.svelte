@@ -88,11 +88,11 @@
       <ul class="my-6 ml-6 list-disc [&>li]:mt-2">
          {#if ScreenOpen}
             <!-- <li>Your Screen is Shared</li> -->
-            <li></li>
+            <!-- <li></li> -->
          {/if}
          {#if CameraOpen}
             <!-- <li>Your Camera is Open</li> -->
-            <li></li>
+            <!-- <li></li> -->
          {/if}
       </ul>
     </Sidebar.GroupContent>
