@@ -71,7 +71,7 @@
                   Window = item.title
                }
                else{
-                  Swal.fire({icon:"success",title:`You need to create connection first!`,confirmButtonColor: "green",timer:3000,showConfirmButton:false})
+                  Swal.fire({icon:"info",title:`You need to create connection first!`,confirmButtonColor: "green",timer:3000,showConfirmButton:false})
                }
             }}>
             <item.icon />
