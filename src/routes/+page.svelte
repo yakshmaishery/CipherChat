@@ -42,7 +42,10 @@
    let Progressmax = 0;
    let downloadfileList:{filename:string,base64:string,filesize:string,datetime:string}[] = []
    const shortdummyID = nanoid(4).toLowerCase() // Generate Random User ID
-   var peer = new Peer(shortdummyID,{debug:3,config:{iceServers:[{urls:"stun:stun.l.google.com:19302"}]}}) // Create Peer
+   var peer = new Peer(shortdummyID,{debug:3,config:{iceServers:[
+      {urls:"stun:stun.l.google.com:19302"},
+      {urls: "turn:numb.viagenie.ca",username: "websitebeaver@mail.com",credential: "webrtc"}
+   ]}}) // Create Peer
 
    peer.on("open",(id) => { // Connect Peer if Success set the ID
       UserID = id
