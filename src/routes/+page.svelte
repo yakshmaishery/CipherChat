@@ -44,7 +44,11 @@
    const shortdummyID = nanoid(4).toLowerCase() // Generate Random User ID
    var peer = new Peer(shortdummyID,{debug:3,config:{iceServers:[
       {urls:"stun:stun.l.google.com:19302"},
-      {urls: "turn:numb.viagenie.ca",username: "websitebeaver@mail.com",credential: "webrtc"}
+      {
+         urls: "turn:relay.metered.ca:443",
+         username: "efNzdT63A5L0vG0r6wh7G",
+         credential: "hjaDGtqQvJYfKf3k"
+      }
    ]}}) // Create Peer
 
    peer.on("open",(id) => { // Connect Peer if Success set the ID
