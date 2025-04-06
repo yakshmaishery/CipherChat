@@ -45,12 +45,9 @@
    var peer = new Peer(shortdummyID,{debug:3,secure:true,config: {
       iceServers: [
          {
-         urls: "stun:stun.l.google.com:19302"
-         },
-         {
-         urls: "turn:relay.metered.ca:443",
-         username: "efNzdT63A5L0vG0r6wh7G",
-         credential: "hjaDGtqQvJYfKf3k"
+            urls: "turn:relay.metered.ca:443?transport=tcp",
+            username: "efNzdT63A5L0vG0r6wh7G",
+            credential: "hjaDGtqQvJYfKf3k"
          }
       ]
    }}) // Create Peer
